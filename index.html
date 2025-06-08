@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduMaster - Learn Without Limits</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Update Tailwind config
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    backgroundColor: {
+                        'dark': '#1a1a1a',
+                        'dark-lighter': '#2d2d2d'
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="./styles/style.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <!-- Navigation -->
+    <nav class="bg-white dark:bg-gray-800 shadow-lg fixed w-full top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="#" onclick="showPage('home')" class="flex items-center hover:opacity-90 transition-opacity">
+                            <i class="fas fa-graduation-cap text-2xl text-indigo-600 mr-2"></i>
+                            <span class="text-xl font-bold text-gray-900">EduMaster</span>
+                        </a>
+                    </div>
+                    <div class="hidden md:ml-6 md:flex md:space-x-30">
+                        <a href="#" class="nav-item text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium" data-trans="nav.home" onclick="showPage('home')">Home</a>
+                        <a href="#" class="nav-item text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium" data-trans="nav.courses" onclick="showPage('courses')">Courses</a>
+                        <a href="#" class="nav-item text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium" data-trans="nav.dashboard" onclick="showPage('dashboard')">Dashboard</a>
+                        <a href="#" class="nav-item text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium" data-trans="nav.about" onclick="showPage('about')">About</a>
+                        <a href="#" class="nav-item text-gray-500 hover:text-gray-900 inline-flex items-center px-1 pt-1 text-sm font-medium" data-trans="nav.contact" onclick="showPage('contact')">Contact</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div id="auth-buttons" class="flex items-center space-x-2">
+                        <!-- Dark mode toggle button -->
+                        <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white px-3 py-2 rounded-md text-sm">
+                            <i class="fas fa-moon"></i>
+                        </button>
+                        <!-- Language switch button -->
+                        <button id="lang-switch" 
+                                onclick="toggleLanguage()" 
+                                class="lang-switch flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 dark:from-gray-700 dark:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700 border border-indigo-100 dark:border-gray-600 transition-all duration-300 group">
+                            <i class="fas fa-globe text-indigo-600 dark:text-indigo-400 group-hover:rotate-180 transition-transform duration-500"></i>
+                            <span class="text-indigo-700 dark:text-gray-300 font-medium">عربي</span>
+                        </button>
+                    </div>
+                    <div id="user-menu" class="hidden relative">
+                        <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
+                            <img id="user-avatar" class="h-8 w-8 rounded-full" src="" alt="">
+                            <span id="user-name"></span>
+                            <i class="fas fa-chevron-down text-xs"></i>
+                        </button>
+                        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="showPage('profile')">Profile</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="showPage('settings')">Settings</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onclick="logout()">Logout</a>
+                        </div>
+                    </div>
+                    <!-- Mobile menu button -->
+                    <button id="mobile-menu-button" onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu overlay -->
+        <div id="mobile-menu" class="hidden fixed inset-0 z-50">
+            <!-- Dark overlay -->
+            <div class="fixed inset-0 bg-black bg-opacity-50"></div>
+            
+            <!-- Menu panel -->
+            <div class="fixed right-0 top-0 w-[80%] sm:w-[60%] md:w-[45%] lg:w-96 h-full bg-white dark:bg-gray-800 shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out">
+                <!-- Menu header with close button -->
+                <div class="flex justify-between items-center p-6 border-b dark:border-gray-700">
+                    <h3 class="text-xl font-medium text-gray-800 dark:text-white" id="mobile-menu-title">Menu</h3>
+                    <button onclick="closeMobileMenu()" class="p-2 rounded-lg text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <!-- Menu content -->
+                <div class="overflow-y-auto h-[calc(100vh-5rem)] pb-20">
+                    <!-- Main Menu Content -->
+                    <div id="mobile-main-menu" class="p-6">
+                        <!-- Navigation links -->
+                        <nav class="space-y-3">
+                            <a href="#" onclick="showPage('home'); closeMobileMenu();" 
+                               class="flex items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-home w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Home</span>
+                            </a>
+                            <a href="#" onclick="showPage('courses'); closeMobileMenu();" 
+                               class="flex items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-book w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Courses</span>
+                            </a>
+                            <a href="#" onclick="showPage('dashboard'); closeMobileMenu();" 
+                               class="flex items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-tachometer-alt w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Dashboard</span>
+                            </a>
+                            <a href="#" onclick="showPage('about'); closeMobileMenu();" 
+                               class="flex items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-info-circle w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">About</span>
+                            </a>
+                            <a href="#" onclick="showPage('contact'); closeMobileMenu();" 
+                               class="flex items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-envelope w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Contact</span>
+                            </a>
+                        </nav>
+
+
+                        <!-- Divider -->
+                        <div class="my-6 border-t border-gray-200 dark:border-gray-700"></div>
+
+                        <!-- Auth buttons -->
+                        <div class="space-y-3">
+                            <button onclick="showMobileSignIn()" 
+                                    class="flex w-full items-center px-4 py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl">
+                                <i class="fas fa-sign-in-alt w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Sign In</span>
+                            </button>
+                            <button onclick="showMobileSignUp()" 
+                                    class="flex w-full items-center px-4 py-3 bg-indigo-600 text-white hover:bg-indigo-700 rounded-xl">
+                                <i class="fas fa-user-plus w-6 mr-3 text-lg"></i>
+                                <span class="text-lg">Sign Up</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Sign Up Form -->
+                    <div id="mobile-signup-form" class="p-6 hidden">
+                        <form class="space-y-4" onsubmit="event.preventDefault(); handleMobileSignUp();">
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
+                                <input type="text" id="mobile-signup-name" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input type="email" id="mobile-signup-email" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="mobile-signup-password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
+                                <input type="password" id="mobile-signup-confirm-password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 text-lg">Sign Up</button>
+                            <button type="button" onclick="showMobileMainMenu()" class="w-full text-gray-600 dark:text-gray-400 py-3 text-lg">Back to Menu</button>
+                        </form>
+                    </div>
+
+                    <!-- Mobile Sign In Form -->
+                    <div id="mobile-signin-form" class="p-6 hidden">
+                        <form class="space-y-4" onsubmit="event.preventDefault(); handleMobileSignIn();">
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input type="email" id="mobile-signin-email" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <div>
+                                <label class="block text-base font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="mobile-signin-password" class="w-full border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <input id="mobile-remember-me" type="checkbox" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                    <label for="mobile-remember-me" class="ml-2 block text-base text-gray-700 dark:text-gray-300">Remember me</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="w-full bg-indigo-600 text-white py-3 rounded-xl hover:bg-indigo-700 text-lg">Sign In</button>
+                            <button type="button" onclick="showMobileMainMenu()" class="w-full text-gray-600 dark:text-gray-400 py-3 text-lg">Back to Menu</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-16">
+        <!-- Home Page -->
+        <div id="home-page" class="page active">
+            <!-- Hero Section -->
+            <section class="hero-gradient py-20 relative overflow-hidden">
+                <!-- Animated Background -->
+                <div class="animated-background">
+                    <div class="animated-shape shape-1"></div>
+                    <div class="animated-shape shape-2"></div>
+                    <div class="animated-shape shape-3"></div>
+                </div>
+                <!-- Hero Content -->
+                <div class="hero-content">
+                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                            <!-- Left Content -->
+                            <div class="text-left animate-fade-in">
+                                <h1 class="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-800" data-trans="hero.title">
+                                    Learn Without Limits
+                                </h1>
+                                <p class="text-xl md:text-2xl mb-8 text-gray-800" data-trans="hero.subtitle">
+                                    Access thousands of courses from world-class instructors
+                                </p>
+                                <!-- Hero buttons -->
+                                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+                                    <button onclick="showPage('courses')" class="hero-button hero-button-pulse px-8 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white text-lg font-semibold rounded-xl shadow-lg hover:from-indigo-700 hover:to-indigo-800 transform hover:scale-105 transition-all duration-200 flex items-center justify-center">
+                                        <i class="fas fa-book-open mr-2"></i>
+                                        Browse Courses
+                                    </button>
+                                    <button onclick="showAuthModal('signup')" class="hero-button secondary-hover px-8 py-4 bg-white text-indigo-600 text-lg font-semibold rounded-xl shadow-lg hover:shadow-indigo-200 border-2 border-indigo-600 hover:bg-indigo-50 hover:border-indigo-700 hover:text-indigo-700 transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center group">
+                                        <i class="fas fa-rocket mr-2 group-hover:rotate-12 transition-transform duration-300"></i>
+                                        Start Learning
+                                    </button>
+                                </div>
+                            </div>
+                            <!-- Right Image -->
+                            <div class="relative h-[400px] animate-fade-in order-first md:order-last">
+                                <img 
+                                    src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=800&h=600&fit=crop" 
+                                    alt="Male student studying" 
+                                    class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-2xl"
+                                />
+                                <div class="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg">
+                                    <i class="fas fa-smile text-2xl text-yellow-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4" data-trans="features.title">Why Choose EduMaster?</h2>
+                        <p class="text-xl text-gray-600" data-trans="features.subtitle">Everything you need to accelerate your learning journey</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
+                            <div class="w-16 h-16 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-play-circle text-2xl text-indigo-600"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3" data-trans="features.expertVideos">Expert-Led Videos</h3>
+                            <p class="text-gray-600 dark:text-gray-300" data-trans="features.expertVideosDesc">Learn from industry professionals with hands-on experience</p>
+                        </div>
+                        <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-certificate text-2xl text-green-600"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3" data-trans="features.certificates">Industry Certificates</h3>
+                            <p class="text-gray-600 dark:text-gray-300" data-trans="features.certificatesDesc">Earn industry-recognized certificates upon successful course completion</p>
+                        </div>
+                        <div class="card-hover bg-white dark:bg-gray-800 p-8 rounded-xl shadow-lg text-center">
+                            <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-users text-2xl text-purple-600"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-3" data-trans="features.community">Learning Community</h3>
+                            <p class="text-gray-600 dark:text-gray-300" data-trans="features.communityDesc">Join a vibrant community of learners to share knowledge and grow together</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Popular Courses -->
+            <section class="py-20 bg-gray-100">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4" data-trans="courses.popularTitle">Popular Courses</h2>
+                        <p class="text-xl text-gray-600" data-trans="courses.popularSubtitle">Start with our most loved courses</p>
+                    </div>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg" data-category="Programming" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400&h=200&fit=crop" alt="Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                    <span class="text-sm text-gray-600">4.8</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2" data-trans="courses.javaScriptCourse">Complete JavaScript Course</h3>
+                            <p class="text-gray-600 mb-4" data-trans="courses.javaScriptDesc">Master JavaScript from basics to advanced concepts</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$49</span>
+                                <span class="text-sm text-gray-500">12 hours</span>
+                            </div>
+                        </div>
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg" data-category="Business" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=200&fit=crop" alt="Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Business</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                    <span class="text-sm text-gray-600">4.9</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2" data-trans="courses.digitalMarketingCourse">Digital Marketing Mastery</h3>
+                            <p class="text-gray-600 mb-4" data-trans="courses.digitalMarketingDesc">Learn SEO, social media, and content marketing</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$39</span>
+                                <span class="text-sm text-gray-500">8 hours</span>
+                            </div>
+                        </div>
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg" data-category="Design" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=200&fit=crop" alt="Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Design</span>
+                                <div class="flex items-center">
+                                    <i class="fas fa-star text-yellow-400 mr-1"></i>
+                                    <span class="text-sm text-gray-600">4.7</span>
+                                </div>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2" data-trans="courses.uiUxCourse">UI/UX Design Fundamentals</h3>
+                            <p class="text-gray-600 mb-4" data-trans="courses.uiUxDesc">Create beautiful and functional user interfaces</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$59</span>
+                                <span class="text-sm text-gray-500">15 hours</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Courses Page -->
+        <div id="courses-page" class="page hidden">
+            <section class="py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4" data-trans="courses.allCoursesTitle">All Courses</h1>
+                        <p class="text-xl text-gray-600" data-trans="courses.allCoursesSubtitle">Discover your next learning adventure</p>
+                    </div>
+                    
+                    <!-- Filter Bar -->
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
+                        <div class="flex flex-wrap items-center justify-between gap-4">
+                            <div class="flex items-center space-x-4">
+                                <select class="border border-gray-300 rounded-md px-3 py-2" data-trans="courses.filterCategory">
+                                    <option>All Categories</option>
+                                    <option>Programming</option>
+                                    <option>Design</option>
+                                    <option>Business</option>
+                                    <option>Marketing</option>
+                                </select>
+                                <select class="border border-gray-300 rounded-md px-3 py-2" data-trans="courses.filterLevel">
+                                    <option>All Levels</option>
+                                    <option>Beginner</option>
+                                    <option>Intermediate</option>
+                                    <option>Advanced</option>
+                                </select>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input type="text" placeholder="Search courses..." class="border border-gray-300 rounded-md px-3 py-2 w-64" data-trans="courses.searchPlaceholder">
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" data-trans="courses.searchButton">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Course Grid -->
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <!-- Frontend Development Courses -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=400&h=200&fit=crop" alt="React Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2" data-trans="courses.reactCourse">React for Beginners</h3>
+                            <p class="text-gray-600 mb-4" data-trans="courses.reactDesc">Learn React from scratch and build modern web applications</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$79</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" data-trans="courses.enrollButton">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- HTML & CSS Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?w=400&h=200&fit=crop" alt="HTML CSS Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">HTML & CSS Fundamentals</h3>
+                            <p class="text-gray-600 mb-4">Master the basics of web development with HTML5 and CSS3</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$29</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Vue.js Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1605379399642-870262d3d051?w=400&h=200&fit=crop" alt="Vue.js Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Vue.js Complete Guide</h3>
+                            <p class="text-gray-600 mb-4">Build modern web apps with Vue.js 3 and Composition API</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$69</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- TypeScript Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Advanced">
+                            <img src="https://images.unsplash.com/photo-1613490900233-141c5560d75d?w=400&h=200&fit=crop" alt="TypeScript Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">TypeScript Mastery</h3>
+                            <p class="text-gray-600 mb-4">Write better JavaScript with TypeScript</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$59</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Tailwind CSS -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1629904853716-f0bc54eea481?w=400&h=200&fit=crop" alt="Tailwind Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Tailwind CSS Masterclass</h3>
+                            <p class="text-gray-600 mb-4">Build modern websites faster with Tailwind CSS</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$49</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Next.js Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Advanced">
+                            <img src="https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?w=400&h=200&fit=crop" alt="Next.js Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Next.js Advanced Development</h3>
+                            <p class="text-gray-600 mb-4">Master Next.js 12 and build full-stack applications</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$79</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Modern CSS -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1517134191118-9d595e4c8c2b?w=400&h=200&fit=crop" alt="CSS Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Modern CSS Layouts</h3>
+                            <p class="text-gray-600 mb-4">Create responsive and adaptive layouts with CSS Grid and Flexbox</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$39</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- ES6+ Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Advanced">
+                            <img src="https://images.unsplash.com/photo-1579468118864-1b9ea3c0db4a?w=400&h=200&fit=crop" alt="JavaScript Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">JavaScript ES6+ Features</h3>
+                            <p class="text-gray-600 mb-4">Unlock the full potential of JavaScript with ES6+ features</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$49</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- React Native -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=200&fit=crop" alt="React Native Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">React Native for Beginners</h3>
+                            <p class="text-gray-600 mb-4">Build mobile apps using React Native and Expo</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$69</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- GSAP Animations -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=200&fit=crop" alt="Web Animation Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Web Animation with GSAP</h3>
+                            <p class="text-gray-600 mb-4">Create high-performance animations for the web using GSAP</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$49</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Redux Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Advanced">
+                            <img src="https://images.unsplash.com/photo-1609921212029-bb5a28e60960?w=400&h=200&fit=crop" alt="Redux Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Advanced</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">State Management with Redux</h3>
+                            <p class="text-gray-600 mb-4">Manage application state with Redux and Redux Toolkit</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$59</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Testing Course -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Programming" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=400&h=200&fit=crop" alt="Testing Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded">Programming</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Frontend Testing with Jest</h3>
+                            <p class="text-gray-600 mb-4">Test your frontend code with Jest and React Testing Library</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$49</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- Design Courses -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Design" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=400&h=200&fit=crop" alt="UI Design Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-pink-100 text-pink-800 text-xs font-semibold px-2.5 py-0.5 rounded">Design</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Advanced UI Design Principles</h3>
+                            <p class="text-gray-600 mb-4">Master modern UI design techniques and tools</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$89</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Design" data-level="Intermediate">
+                            <img src="https://images.unsplash.com/photo-1541462608143-67571c6738dd?w=400&h=200&fit=crop" alt="UX Design Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-pink-100 text-pink-800 text-xs font-semibold px-2.5 py-0.5 rounded">Design</span>
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Intermediate</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">User Experience Design</h3>
+                            <p class="text-gray-600 mb-4">Create seamless user experiences for digital products</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$79</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- More Design Courses... -->
+
+                        <!-- Marketing Courses -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Marketing" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1533750516457-a7f992034fec?w=400&h=200&fit=crop" alt="Digital Marketing Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-orange-100 text-orange-800 text-xs font-semibold px-2.5 py-0.5 rounded">Marketing</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Digital Marketing Strategy</h3>
+                            <p class="text-gray-600 mb-4">Develop comprehensive digital marketing campaigns</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$69</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- More Marketing Courses... -->
+
+                        <!-- Business Courses -->
+                        <div class="course-card card-hover p-6 rounded-xl shadow-lg bg-white dark:bg-gray-800" data-category="Business" data-level="Beginner">
+                            <img src="https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=400&h=200&fit=crop" alt="Business Management Course" class="w-full h-48 object-cover rounded-lg mb-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">Business</span>
+                                <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2.5 py-0.5 rounded">Beginner</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">Business Management Essentials</h3>
+                            <p class="text-gray-600 mb-4">Learn fundamental business management principles</p>
+                            <div class="flex justify-between items-center">
+                                <span class="text-2xl font-bold text-indigo-600">$99</span>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700">Enroll Now</button>
+                            </div>
+                        </div>
+
+                        <!-- More Business Courses... -->
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page hidden">
+            <section class="py-20">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="mb-8">
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4" data-trans="dashboard.title">My Dashboard</h1>
+                        <p class="text-xl text-gray-600" data-trans="dashboard.subtitle">Track your learning progress</p>
+                    </div>
+
+                    <!-- Stats Cards -->
+                    <div class="grid md:grid-cols-4 gap-6 mb-12">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-book text-blue-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900" data-trans="dashboard.enrolledCourses">0</h3>
+                                    <p class="text-gray-600" data-trans="dashboard.enrolledCoursesDesc">Enrolled Courses</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-check-circle text-green-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900" data-trans="dashboard.completedCourses">0</h3>
+                                    <p class="text-gray-600" data-trans="dashboard.completedCoursesDesc">Completed</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-clock text-purple-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900" data-trans="dashboard.hoursLearned">0 h</h3>
+                                    <p class="text-gray-600" data-trans="dashboard.hoursLearnedDesc">Hours Learned</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-certificate text-yellow-600"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900" data-trans="dashboard.certificatesEarned">0</h3>
+                                    <p class="text-gray-600" data-trans="dashboard.certificatesEarnedDesc">Certificates</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page -->
+        <div id="about-page" class="page hidden">
+            <section class="py-20">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4" data-trans="about.title">About EduMaster</h1>
+                        <p class="text-xl text-gray-600" data-trans="about.subtitle">Empowering learners worldwide</p>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4" data-trans="about.missionTitle">Our Mission</h2>
+                        <p class="text-gray-600 mb-6" data-trans="about.missionDesc">At EduMaster, we believe that quality education should be accessible to everyone, anywhere, anytime. Our platform connects passionate learners with expert instructors to create transformative learning experiences.</p>
+                        
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4" data-trans="about.offerTitle">What We Offer</h2>
+                        <ul class="text-gray-600 space-y-2 mb-6" data-trans="about.offerList">
+                            <li>• Over 10,000+ courses across various disciplines</li>
+                            <li>• Expert instructors from leading companies and universities</li>
+                            <li>• Interactive learning experiences with hands-on projects</li>
+                            <li>• Industry-recognized certificates</li>
+                            <li>• Flexible learning schedules</li>
+                            <li>• Community support and networking opportunities</li>
+                        </ul>
+
+                        <h2 class="text-2xl font-bold text-gray-900 mb-4" data-trans="about.teamTitle">Our Team</h2>
+                        <p class="text-gray-600" data-trans="about.teamDesc">Founded by education enthusiasts and technology experts, EduMaster is dedicated to revolutionizing online learning through innovative technology and pedagogical excellence.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Contact Page -->
+        <div id="contact-page" class="page hidden">
+            <section class="py-20">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-12">
+                        <h1 class="text-4xl font-bold text-gray-900 mb-4" data-trans="contact.title">Contact Us</h1>
+                        <p class="text-xl text-gray-600" data-trans="contact.subtitle">We'd love to hear from you</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-6" data-trans="contact.getInTouch">Get in Touch</h2>
+                            <form class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="contact.nameLabel">Name</label>
+                                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="contact.emailLabel">Email</label>
+                                    <input type="email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="contact.subjectLabel">Subject</label>
+                                    <input type="text" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="contact.messageLabel">Message</label>
+                                    <textarea rows="4" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700" data-trans="contact.sendMessage">
+                                    <i class="fas fa-paper-plane"></i> Send Message
+                                </button>
+                            </form>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                            <h2 class="text-2xl font-bold text-gray-900 mb-6" data-trans="contact.infoTitle">Contact Information</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <i class="fas fa-envelope text-indigo-600 mr-3"></i>
+                                    <span>support@edumaster.com</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-phone text-indigo-600 mr-3"></i>
+                                    <span>+1 (555) 123-4567</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <i class="fas fa-map-marker-alt text-indigo-600 mr-3"></i>
+                                    <span>123 Education St, Learning City, LC 12345</span>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <h3 class="text-lg font-semibold text-gray-900 mb-4" data-trans="contact.followUs">Follow Us</h3>
+                                <div class="flex space-x-4">
+                                    <a href="https://facebook.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-facebook text-xl"></i>
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-twitter text-xl"></i>
+                                    </a>
+                                    <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-linkedin text-xl"></i>
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-instagram text-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-graduation-cap text-2xl text-indigo-500 mr-2"></i>
+                        <span class="text-xl font-bold text-white">EduMaster</span>
+                    </div>
+                    <p class="text-sm">Empowering learners worldwide through quality education.</p>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="showPage('home')" class="hover:text-white transition-colors">Home</a></li>
+                        <li><a href="#" onclick="showPage('courses')" class="hover:text-white transition-colors">Courses</a></li>
+                        <li><a href="#" onclick="showPage('about')" class="hover:text-white transition-colors">About</a></li>
+                        <li><a href="#" onclick="showPage('contact')" class="hover:text-white transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" onclick="showPage('help')" class="hover:text-white transition-colors">Help Center</a></li>
+                        <li><a href="#" onclick="showPage('terms')" class="hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" onclick="showPage('privacy')" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showPage('faq')" class="hover:text-white transition-colors">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold mb-4">Contact Us</h3>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-envelope mr-2"></i>support@edumaster.com</li>
+                        <li><i class="fas fa-phone mr-2"></i>+201001924076</li>
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>Cairo, Egypt</li>
+                        <li class="pt-4">
+                            <div class="flex space-x-4">
+                                <a href="https://facebook.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                    <i class="fab fa-facebook text-xl"></i>
+                                </a>
+                                <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                    <i class="fab fa-twitter text-xl"></i>
+                                </a>
+                                <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                    <i class="fab fa-linkedin text-xl"></i>
+                                </a>
+                                <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                    <i class="fab fa-instagram text-xl"></i>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-sm">All rights reserved © Ahmed Kotb 2025</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Authentication Modal -->
+    <div id="auth-modal" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+        <div class="bg-black bg-opacity-50 absolute inset-0"></div>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg max-w-md w-full z-10 p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-900" id="modal-title">Sign In</h2>
+                <button class="text-gray-500 hover:text-gray-900" onclick="closeAuthModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modal-content">
+                <!-- Sign In Form -->
+                <form id="signin-form" class="space-y-4" onsubmit="event.preventDefault(); signin();">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.email">Email</label>
+                        <input type="email" id="signin-email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.password">Password</label>
+                        <input type="password" id="signin-password" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-900" data-trans="auth.rememberMe">Remember me</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700" data-trans="auth.signIn">Sign In</button>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form id="signup-form" class="space-y-4 hidden" onsubmit="event.preventDefault(); signup();">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.formFields.name">Name</label>
+                        <input type="text" id="signup-name" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.formFields.email">Email</label>
+                        <input type="email" id="signup-email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.formFields.password">Password</label>
+                        <input type="password" id="signup-password" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-trans="auth.formFields.confirmPassword">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700" data-trans="auth.formFields.submit">Sign Up</button>
+                </form>
+
+                <!-- Forgot Password Form -->
+                <form id="forgot-password-form" class="space-y-4 hidden" onsubmit="event.preventDefault(); sendResetLink();">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input type="email" id="reset-email" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" required>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">Send Reset Link</button>
+                </form>
+            </div>
+            <div class="mt-4">
+                <p class="text-sm text-gray-500 text-center">
+                    <span id="auth-toggle-text" class="flex items-center justify-center gap-2">
+                        <span data-trans="auth.noAccount">Don't have an account?</span>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-500 font-medium" onclick="toggleAuthMode()" data-trans="auth.signUp">Sign Up</a>
+                    </span>
+                    <span id="auth-forgot-text" class="hidden flex items-center justify-center gap-2">
+                        <span>Remembered your password?</span>
+                        <a href="#" class="text-indigo-600 hover:text-indigo-500 font-medium" onclick="showSignIn()" data-trans="auth.signIn">Sign In</a>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="./js/translations.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+</html>
