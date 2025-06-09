@@ -353,25 +353,34 @@
                     <!-- Filter Bar -->
                     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-8">
                         <div class="flex flex-wrap items-center justify-between gap-4">
-                            <div class="flex items-center space-x-4">
-                                <select class="border border-gray-300 rounded-md px-3 py-2" data-trans="courses.filterCategory">
-                                    <option>All Categories</option>
-                                    <option>Programming</option>
-                                    <option>Design</option>
-                                    <option>Business</option>
-                                    <option>Marketing</option>
-                                </select>
-                                <select class="border border-gray-300 rounded-md px-3 py-2" data-trans="courses.filterLevel">
-                                    <option>All Levels</option>
-                                    <option>Beginner</option>
-                                    <option>Intermediate</option>
-                                    <option>Advanced</option>
-                                </select>
+                            <div class="flex flex-wrap items-center gap-4">
+                                <div class="flex flex-col gap-2">
+                                    <label for="category-select" class="text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                                    <select id="category-select" class="min-w-[200px] border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="all">All Categories</option>
+                                        <option value="programming">Programming</option>
+                                        <option value="design">Design</option>
+                                        <option value="business">Business</option>
+                                        <option value="marketing">Marketing</option>
+                                    </select>
+                                </div>
+                                <div class="flex flex-col gap-2">
+                                    <label for="level-select" class="text-sm font-medium text-gray-700 dark:text-gray-300">Difficulty Level</label>
+                                    <select id="level-select" class="min-w-[200px] border border-gray-300 rounded-md px-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                        <option value="all">All Levels</option>
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <input type="text" placeholder="Search courses..." class="border border-gray-300 rounded-md px-3 py-2 w-64" data-trans="courses.searchPlaceholder">
-                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700" data-trans="courses.searchButton">
-                                    <i class="fas fa-search"></i>
+                            <div class="flex items-center gap-2">
+                                <div class="relative">
+                                    <input type="text" placeholder="Search courses..." class="w-64 border border-gray-300 rounded-md pl-10 pr-3 py-2 bg-white dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                                    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                </div>
+                                <button class="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors">
+                                    Search
                                 </button>
                             </div>
                         </div>
@@ -727,6 +736,40 @@
                     </div>
                     <div class="grid md:grid-cols-2 gap-8">
                         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6" data-trans="contact.infoTitle">Contact Information</h2>
+                            <div class="space-y-4">
+                                <div class="flex items-center text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-envelope text-indigo-600 w-6"></i>
+                                    <span class="ml-3" data-trans="contact.email">support@edumaster.com</span>
+                                </div>
+                                <div class="flex items-center text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-phone text-indigo-600 w-6"></i>
+                                    <span class="ml-3" data-trans="contact.phone">+201001924076</span>
+                                </div>
+                                <div class="flex items-center text-gray-700 dark:text-gray-300">
+                                    <i class="fas fa-map-marker-alt text-indigo-600 w-6"></i>
+                                    <span class="ml-3" data-trans="contact.address">Cairo, Egypt</span>
+                                </div>
+                            </div>
+                            <div class="mt-8">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4" data-trans="contact.followUs">Follow Us</h3>
+                                <div class="flex space-x-4">
+                                    <a href="https://facebook.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-facebook text-xl"></i>
+                                    </a>
+                                    <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-twitter text-xl"></i>
+                                    </a>
+                                    <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-linkedin text-xl"></i>
+                                    </a>
+                                    <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
+                                        <i class="fab fa-instagram text-xl"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
                             <h2 class="text-2xl font-bold text-gray-900 mb-6" data-trans="contact.getInTouch">Get in Touch</h2>
                             <form class="space-y-4">
                                 <div>
@@ -750,40 +793,6 @@
                                 </button>
                             </form>
                         </div>
-                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8">
-                            <h2 class="text-2xl font-bold text-gray-900 mb-6" data-trans="contact.infoTitle">Contact Information</h2>
-                            <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <i class="fas fa-envelope text-indigo-600 mr-3"></i>
-                                    <span>support@edumaster.com</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-phone text-indigo-600 mr-3"></i>
-                                    <span>+1 (555) 123-4567</span>
-                                </div>
-                                <div class="flex items-center">
-                                    <i class="fas fa-map-marker-alt text-indigo-600 mr-3"></i>
-                                    <span>123 Education St, Learning City, LC 12345</span>
-                                </div>
-                            </div>
-                            <div class="mt-8">
-                                <h3 class="text-lg font-semibold text-gray-900 mb-4" data-trans="contact.followUs">Follow Us</h3>
-                                <div class="flex space-x-4">
-                                    <a href="https://facebook.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
-                                        <i class="fab fa-facebook text-xl"></i>
-                                    </a>
-                                    <a href="https://twitter.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
-                                        <i class="fab fa-twitter text-xl"></i>
-                                    </a>
-                                    <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
-                                        <i class="fab fa-linkedin text-xl"></i>
-                                    </a>
-                                    <a href="https://instagram.com" target="_blank" class="text-gray-400 hover:text-indigo-500 transition-colors">
-                                        <i class="fab fa-instagram text-xl"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -799,28 +808,28 @@
                         <i class="fas fa-graduation-cap text-2xl text-indigo-500 mr-2"></i>
                         <span class="text-xl font-bold text-white">EduMaster</span>
                     </div>
-                    <p class="text-sm">Empowering learners worldwide through quality education.</p>
+                    <p class="text-sm" data-trans="about.subtitle">Empowering learners worldwide</p>
                 </div>
                 <div>
-                    <h3 class="text-white font-semibold mb-4">Quick Links</h3>
+                    <h3 class="text-white font-semibold mb-4" data-trans="footer.quickLinks">Quick Links</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" onclick="showPage('home')" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="#" onclick="showPage('courses')" class="hover:text-white transition-colors">Courses</a></li>
-                        <li><a href="#" onclick="showPage('about')" class="hover:text-white transition-colors">About</a></li>
-                        <li><a href="#" onclick="showPage('contact')" class="hover:text-white transition-colors">Contact</a></li>
+                        <li><a href="#" onclick="showPage('home')" class="hover:text-white transition-colors" data-trans="nav.home">Home</a></li>
+                        <li><a href="#" onclick="showPage('courses')" class="hover:text-white transition-colors" data-trans="nav.courses">Courses</a></li>
+                        <li><a href="#" onclick="showPage('about')" class="hover:text-white transition-colors" data-trans="nav.about">About</a></li>
+                        <li><a href="#" onclick="showPage('contact')" class="hover:text-white transition-colors" data-trans="nav.contact">Contact</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-white font-semibold mb-4">Support</h3>
+                    <h3 class="text-white font-semibold mb-4" data-trans="footer.support">Support</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" onclick="showPage('help')" class="hover:text-white transition-colors">Help Center</a></li>
-                        <li><a href="#" onclick="showPage('terms')" class="hover:text-white transition-colors">Terms of Service</a></li>
-                        <li><a href="#" onclick="showPage('privacy')" class="hover:text-white transition-colors">Privacy Policy</a></li>
-                        <li><a href="#" onclick="showPage('faq')" class="hover:text-white transition-colors">FAQ</a></li>
+                        <li><a href="#" onclick="showPage('help')" class="hover:text-white transition-colors" data-trans="footer.helpCenter">Help Center</a></li>
+                        <li><a href="#" onclick="showPage('terms')" class="hover:text-white transition-colors" data-trans="footer.termsOfService">Terms of Service</a></li>
+                        <li><a href="#" onclick="showPage('privacy')" class="hover:text-white transition-colors" data-trans="footer.privacyPolicy">Privacy Policy</a></li>
+                        <li><a href="#" onclick="showPage('faq')" class="hover:text-white transition-colors" data-trans="footer.faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h3 class="text-white font-semibold mb-4">Contact Us</h3>
+                    <h3 class="text-white font-semibold mb-4" data-trans="footer.contactUs">Contact Us</h3>
                     <ul class="space-y-2">
                         <li><i class="fas fa-envelope mr-2"></i>support@edumaster.com</li>
                         <li><i class="fas fa-phone mr-2"></i>+201001924076</li>
@@ -845,7 +854,7 @@
                 </div>
             </div>
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-sm">All rights reserved © Ahmed Kotb 2025</p>
+                <p class="text-sm" data-trans="footer.allRights">All rights reserved © Ahmed Kotb 2025</p>
             </div>
         </div>
     </footer>
@@ -926,7 +935,7 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="./js/translations.js"></script>
-    <script src="./js/main.js"></script>
+    <script src="/js/translations.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

@@ -130,6 +130,9 @@ const translations = {
             sendMessage: "Send Message",
             infoTitle: "Contact Information",
             followUs: "Follow Us",
+            email: "support@edumaster.com",
+            phone: "+201001924076",
+            address: "Cairo, Egypt",
             form: {
                 name: "Name",
                 email: "Email",
@@ -141,6 +144,16 @@ const translations = {
                 title: "Contact Information",
                 follow: "Follow Us"
             }
+        },
+        footer: {
+            quickLinks: "Quick Links",
+            support: "Support",
+            contactUs: "Contact Us",
+            helpCenter: "Help Center",
+            termsOfService: "Terms of Service",
+            privacyPolicy: "Privacy Policy",
+            faq: "FAQ",
+            allRights: "All rights reserved © Ahmed Kotb 2025"
         }
     },
     ar: {
@@ -263,6 +276,9 @@ const translations = {
             sendMessage: "إرسال الرسالة",
             infoTitle: "معلومات الاتصال",
             followUs: "تابعنا",
+            email: "support@edumaster.com",
+            phone: "٢٠١٠٠١٩٢٤٠٧٦+",
+            address: "القاهرة، مصر",
             form: {
                 name: "الاسم",
                 email: "البريد الإلكتروني",
@@ -274,6 +290,16 @@ const translations = {
                 title: "معلومات الاتصال",
                 follow: "تابعنا"
             }
+        },
+        footer: {
+            quickLinks: "روابط سريعة",
+            support: "الدعم",
+            contactUs: "اتصل بنا",
+            helpCenter: "مركز المساعدة",
+            termsOfService: "شروط الخدمة",
+            privacyPolicy: "سياسة الخصوصية",
+            faq: "الأسئلة الشائعة",
+            allRights: "جميع الحقوق محفوظة © أحمد قطب ٢٠٢٥"
         }
     }
 };

@@ -10,6 +10,32 @@ tailwind.config = {
     }
 }
 
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Show home page by default
+    showPage('home');
+    
+    // Add event listeners for course filtering
+    const categorySelect = document.getElementById('category-select');
+    const levelSelect = document.getElementById('level-select');
+    const searchInput = document.querySelector('input[placeholder="Search courses..."]');
+    const searchButton = searchInput?.nextElementSibling;
+    
+    if (categorySelect) {
+        categorySelect.addEventListener('change', filterCourses);
+    }
+    if (levelSelect) {
+        levelSelect.addEventListener('change', filterCourses);
+    }
+    if (searchInput) {
+        searchInput.addEventListener('input', filterCourses);
+        searchButton?.addEventListener('click', filterCourses);
+    }
+    
+    // Initialize translations
+    updateContent();
+});
+
 // Page navigation
 function showPage(page) {
     const pages = document.querySelectorAll('.page');
@@ -185,21 +211,37 @@ function updateContent() {
 
 // Course filtering
 function filterCourses() {
-    const selectedCategory = document.querySelector('select[data-trans="courses.filterCategory"]').value;
-    const selectedLevel = document.querySelector('select[data-trans="courses.filterLevel"]').value;
+    const categorySelect = document.getElementById('category-select');
+    const levelSelect = document.getElementById('level-select');
+    const searchInput = document.querySelector('input[placeholder="Search courses..."]');
+    
+    const selectedCategory = categorySelect?.value || 'all';
+    const selectedLevel = levelSelect?.value || 'all';
+    const searchTerm = searchInput?.value.toLowerCase() || '';
+    
     const courseCards = document.querySelectorAll('.course-card');
-
+    
     courseCards.forEach(card => {
-        const cardCategory = card.getAttribute('data-category');
-        const cardLevel = card.getAttribute('data-level');
+        const cardCategory = card.getAttribute('data-category')?.toLowerCase();
+        const cardLevel = card.getAttribute('data-level')?.toLowerCase();
+        const cardTitle = card.querySelector('h3')?.textContent.toLowerCase() || '';
+        const cardDesc = card.querySelector('p')?.textContent.toLowerCase() || '';
         
-        const categoryMatch = selectedCategory === 'All Categories' || cardCategory === selectedCategory;
-        const levelMatch = selectedLevel === 'All Levels' || cardLevel === selectedLevel;
-
-        if (categoryMatch && levelMatch) {
-            card.classList.remove('hidden');
+        const categoryMatch = selectedCategory === 'all' || cardCategory === selectedCategory;
+        const levelMatch = selectedLevel === 'all' || cardLevel === selectedLevel;
+        const searchMatch = searchTerm === '' || 
+                          cardTitle.includes(searchTerm) || 
+                          cardDesc.includes(searchTerm);
+        
+        if (categoryMatch && levelMatch && searchMatch) {
+            card.style.display = 'block';
+            // Add a fade-in animation
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.opacity = '1';
+            }, 50);
         } else {
-            card.classList.add('hidden');
+            card.style.display = 'none';
         }
     });
 }
